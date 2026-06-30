@@ -1,0 +1,6 @@
+@WebApplication_App_Concurso_HostAddress = http://localhost:5293
+
+GET {{WebApplication_App_Concurso_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

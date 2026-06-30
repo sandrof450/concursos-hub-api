@@ -1,0 +1,76 @@
+# ===========================
+# .NET / ASP.NET Core
+# ===========================
+bin/
+obj/
+out/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ===========================
+# Configurações sensíveis
+# ===========================
+appsettings.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+!appsettings.example.json
+
+# ===========================
+# Variáveis de ambiente
+# ===========================
+.env
+.env.local
+.env.development
+.env.production
+
+# ===========================
+# Visual Studio / Rider / VS Code
+# ===========================
+.vs/
+.vscode/
+.idea/
+*.swp
+*.DotSettings.user
+
+# ===========================
+# Logs
+# ===========================
+*.log
+logs/
+
+# ===========================
+# Banco de dados local
+# ===========================
+*.db
+*.sqlite
+*.sqlite3
+
+# ===========================
+# Pacotes NuGet
+# ===========================
+*.nupkg
+packages/
+*.nuget.props
+*.nuget.targets
+
+# ===========================
+# Build e publish
+# ===========================
+publish/
+*.pdb
+*.cache
+
+# ===========================
+# Sistema operacional
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===========================
+# Hangfire (se usar storage local)
+# ===========================
+Hangfire.sqlite
