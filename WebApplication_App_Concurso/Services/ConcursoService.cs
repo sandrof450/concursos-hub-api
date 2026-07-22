@@ -14,16 +14,19 @@ namespace WebApplication_App_Concurso.Services
         private readonly IEnumerable<IScrapingService> _scrapers;
         private readonly IConcursoRepository _concursoRepository;
         private readonly IEstadoNormalizadorService _estadoNormalizador;
+        private readonly IFonteProvider _fonteProvider;
 
         public ConcursoService(
             IEnumerable<IScrapingService> scrapers, 
             IConcursoRepository concursoRepository, 
-            IEstadoNormalizadorService estadoNormalizador
+            IEstadoNormalizadorService estadoNormalizador,
+            IFonteProvider fonteProvider
             )
         {
             _scrapers = scrapers;
             _concursoRepository = concursoRepository;
             _estadoNormalizador = estadoNormalizador;
+            _fonteProvider = fonteProvider;
         }
 
         public async Task<List<ConcursoDTO>> GetAllConcursosAsync()
@@ -126,7 +129,7 @@ namespace WebApplication_App_Concurso.Services
         {
             try
             {
-                var fontes = await FonteData.GetAllFontesAsync();
+                var fontes = await _fonteProvider.GetAllFontesAsync();
                 if (fontes == null || fontes.Count == 0)
                     throw new ConcursoServiceException("No fontes found in the repository.");
 

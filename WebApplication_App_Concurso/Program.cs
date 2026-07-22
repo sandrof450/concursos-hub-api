@@ -43,6 +43,7 @@ builder.Services.AddDbContext<DataContext>(
 builder.Services.AddScoped<IConcursoService, ConcursoService>();
 builder.Services.AddScoped<IConcursoRepository, ConcursoRepository>();
 builder.Services.AddScoped<IEstadoNormalizadorService, EstadoNormalizadorService>();
+builder.Services.AddScoped<IFonteProvider, FonteProvider>();
 #endregion
 
 #region Injection jobs
@@ -69,13 +70,12 @@ if (!isTesting)
             c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))
         )
     );
+    var url = builder.Configuration["JobsSettings:UrlCreateConcurso"] ?? throw new Exception("UrlCreateConcurso Vazia");
+    builder.Services.AddHttpClient("ConcursosApi", client =>
+    {
+        client.BaseAddress = new Uri(url);
+    });
 }
-
-var url = builder.Configuration["JobsSettings:UrlCreateConcurso"] ?? throw new Exception("UrlCreateConcurso Vazia"); ;
-builder.Services.AddHttpClient("ConcursosApi", client =>
-{
-    client.BaseAddress = new Uri(url);
-});
 #endregion
 
 #region Configuração CORS
@@ -90,6 +90,9 @@ builder.Services.AddCors(options =>
     });
 });
 #endregion
+
+
+builder.Services.AddHealthChecks();
 
 builder.WebHost.UseUrls("http://0.0.0.0:8080");
 
@@ -147,6 +150,8 @@ if (!isTesting)
         db.Database.Migrate();
     }
 }
+
+app.MapHealthChecks("/health");
 
 app.Run();
 

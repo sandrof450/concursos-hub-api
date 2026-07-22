@@ -8,6 +8,7 @@ using WebApplication_App_Concurso.Models.Filters;
 using WebApplication_App_Concurso.Repositories.Interfaces;
 using WebApplication_App_Concurso.Scrapers.Interfaces;
 using WebApplication_App_Concurso.Services;
+using WebApplication_App_Concurso.Services.Interfaces;
 
 namespace WebApplication_App_Concurso.Tests.Unit.Services;
 
@@ -15,6 +16,7 @@ public class ConcursoServiceTests
 {
     private readonly Mock<IConcursoRepository> _repositoryMock;
     private readonly Mock<IScrapingService> _scraperMock;
+    private readonly Mock<IFonteProvider> _fonteProviderMock;
     private readonly EstadoNormalizadorService _normalizador;
     private readonly ConcursoService _sut;
 
@@ -22,12 +24,14 @@ public class ConcursoServiceTests
     {
         _repositoryMock = new Mock<IConcursoRepository>();
         _scraperMock = new Mock<IScrapingService>();
+        _fonteProviderMock = new Mock<IFonteProvider>();
         _normalizador = new EstadoNormalizadorService();
 
         _sut = new ConcursoService(
             new[] { _scraperMock.Object },
             _repositoryMock.Object,
-            _normalizador
+            _normalizador,
+            _fonteProviderMock.Object
         );
     }
     // ===========================
@@ -394,28 +398,27 @@ public class ConcursoServiceTests
     public async Task GetAllFontesConcursoAsync_DeveRetornarListaDTO()
     {
         var fontes = new List<string>
-    {
-        "PCI",
-        "Concursos no Brasil"
-    };
+        {
+            "PCI Concursos",
+            "Concursos no Brasil"
+        };
 
-        _repositoryMock
-            .Setup(r => r.GetAllFontesConcursoAsync())
+        _fonteProviderMock
+            .Setup(f => f.GetAllFontesAsync())
             .ReturnsAsync(fontes);
 
         var resultado = await _sut.GetAllFontesConcursoAsync();
 
         resultado.Should().HaveCount(2);
-
-        resultado[0].FonteNome.Should().Be("PCI");
+        resultado[0].FonteNome.Should().Be("PCI Concursos");
         resultado[1].FonteNome.Should().Be("Concursos no Brasil");
     }
 
     [Fact]
     public async Task GetAllFontesConcursoAsync_DeveLancarException_QuandoListaVazia()
     {
-        _repositoryMock
-            .Setup(r => r.GetAllFontesConcursoAsync())
+        _fonteProviderMock
+            .Setup(f => f.GetAllFontesAsync())
             .ReturnsAsync(new List<string>());
 
         Func<Task> act = async () => await _sut.GetAllFontesConcursoAsync();
@@ -428,8 +431,8 @@ public class ConcursoServiceTests
     [Fact]
     public async Task GetAllFontesConcursoAsync_DeveLancarException_QuandoRepositorioRetornarNull()
     {
-        _repositoryMock
-            .Setup(r => r.GetAllFontesConcursoAsync())
+        _fonteProviderMock
+            .Setup(f => f.GetAllFontesAsync())
             .ReturnsAsync((List<string>)null!);
 
         Func<Task> act = async () => await _sut.GetAllFontesConcursoAsync();
@@ -442,14 +445,10 @@ public class ConcursoServiceTests
     [Fact]
     public async Task GetAllFontesConcursoAsync_DeveLancarException_QuandoFonteVazia()
     {
-        var fontes = new List<string>
-    {
-        "PCI",
-        ""
-    };
+        var fontes = new List<string> { "PCI Concursos", "" };
 
-        _repositoryMock
-            .Setup(r => r.GetAllFontesConcursoAsync())
+        _fonteProviderMock
+            .Setup(f => f.GetAllFontesAsync())
             .ReturnsAsync(fontes);
 
         Func<Task> act = async () => await _sut.GetAllFontesConcursoAsync();
@@ -462,14 +461,10 @@ public class ConcursoServiceTests
     [Fact]
     public async Task GetAllFontesConcursoAsync_DeveLancarException_QuandoFonteNull()
     {
-        var fontes = new List<string?>
-    {
-        "PCI",
-        null
-    };
+        var fontes = new List<string?> { "PCI Concursos", null };
 
-        _repositoryMock
-            .Setup(r => r.GetAllFontesConcursoAsync())
+        _fonteProviderMock
+            .Setup(f => f.GetAllFontesAsync())
             .ReturnsAsync(fontes!);
 
         Func<Task> act = async () => await _sut.GetAllFontesConcursoAsync();
@@ -482,8 +477,8 @@ public class ConcursoServiceTests
     [Fact]
     public async Task GetAllFontesConcursoAsync_DeveEncapsularException()
     {
-        _repositoryMock
-            .Setup(r => r.GetAllFontesConcursoAsync())
+        _fonteProviderMock
+            .Setup(f => f.GetAllFontesAsync())
             .ThrowsAsync(new Exception("Erro"));
 
         Func<Task> act = async () => await _sut.GetAllFontesConcursoAsync();
