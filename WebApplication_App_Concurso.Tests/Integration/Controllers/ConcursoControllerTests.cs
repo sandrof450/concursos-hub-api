@@ -167,8 +167,8 @@ public class ConcursoControllerTests : IClassFixture<CustomWebApplicationFactory
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         resultado.Should().NotBeEmpty();
-        resultado.Should().Contain(f => f.FonteNome == "PCIConcursos");
-        resultado.Should().Contain(f => f.FonteNome == "ConcursosBrasil");
+        resultado.Should().Contain(f => f.FonteNome == "PCI Concursos");
+        resultado.Should().Contain(f => f.FonteNome == "Concursos no Brasil");
     }
     #endregion
 }

@@ -43,6 +43,7 @@ builder.Services.AddDbContext<DataContext>(
 builder.Services.AddScoped<IConcursoService, ConcursoService>();
 builder.Services.AddScoped<IConcursoRepository, ConcursoRepository>();
 builder.Services.AddScoped<IEstadoNormalizadorService, EstadoNormalizadorService>();
+builder.Services.AddScoped<IFonteProvider, FonteProvider>();
 #endregion
 
 #region Injection jobs
