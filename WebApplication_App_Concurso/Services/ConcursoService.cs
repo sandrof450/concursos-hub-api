@@ -1,4 +1,5 @@
-﻿using WebApplication_App_Concurso.DTOs;
+﻿using WebApplication_App_Concurso.Data;
+using WebApplication_App_Concurso.DTOs;
 using WebApplication_App_Concurso.Exceptions;
 using WebApplication_App_Concurso.Models;
 using WebApplication_App_Concurso.Models.Filters;
@@ -67,9 +68,9 @@ namespace WebApplication_App_Concurso.Services
                 {
                     PageNumber = filtersDTO.PageNumber,
                     PageSize = filtersDTO.PageSize,
-                    Titulo = filtersDTO.Titulo,
-                    Orgao = filtersDTO.Orgao,
-                    Area = filtersDTO.Area,
+                    Titulo = filtersDTO.Titulo == null ? null : filtersDTO.Titulo.Trim(),
+                    Orgao = filtersDTO.Orgao == null ? null : filtersDTO.Orgao.Trim(),
+                    Area = filtersDTO.Area == null ? null : filtersDTO.Area.Trim(),
                     Fonte = filtersDTO.Fonte,
                     Estados = filtersDTO.Estados?
                         .Select(e => e.Equals("Nacional", StringComparison.OrdinalIgnoreCase)
@@ -125,7 +126,7 @@ namespace WebApplication_App_Concurso.Services
         {
             try
             {
-                var fontes = await _concursoRepository.GetAllFontesConcursoAsync();
+                var fontes = await FonteData.GetAllFontesAsync();
                 if (fontes == null || fontes.Count == 0)
                     throw new ConcursoServiceException("No fontes found in the repository.");
 
