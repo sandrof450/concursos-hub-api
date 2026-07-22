@@ -91,6 +91,9 @@ builder.Services.AddCors(options =>
 });
 #endregion
 
+
+builder.Services.AddHealthChecks();
+
 builder.WebHost.UseUrls("http://0.0.0.0:8080");
 
 var app = builder.Build();
@@ -147,6 +150,8 @@ if (!isTesting)
         db.Database.Migrate();
     }
 }
+
+app.MapHealthChecks("/health");
 
 app.Run();
 
