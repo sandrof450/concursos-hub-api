@@ -69,13 +69,12 @@ if (!isTesting)
             c.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))
         )
     );
+    var url = builder.Configuration["JobsSettings:UrlCreateConcurso"] ?? throw new Exception("UrlCreateConcurso Vazia");
+    builder.Services.AddHttpClient("ConcursosApi", client =>
+    {
+        client.BaseAddress = new Uri(url);
+    });
 }
-
-var url = builder.Configuration["JobsSettings:UrlCreateConcurso"] ?? throw new Exception("UrlCreateConcurso Vazia"); ;
-builder.Services.AddHttpClient("ConcursosApi", client =>
-{
-    client.BaseAddress = new Uri(url);
-});
 #endregion
 
 #region Configuração CORS
