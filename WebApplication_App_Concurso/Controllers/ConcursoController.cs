@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication_App_Concurso.DTOs;
 using WebApplication_App_Concurso.Exceptions;
+using WebApplication_App_Concurso.Filters;
 using WebApplication_App_Concurso.Services.Interfaces;
 
 namespace WebApplication_App_Concurso.Controllers
@@ -18,6 +20,7 @@ namespace WebApplication_App_Concurso.Controllers
         }
 
         [HttpPost(Name = "CreateConcurso")]
+        [ServiceFilter(typeof(ApiKeyAuthFilter))]
         public async Task<IActionResult> CreateConcurso()
         {
             var response = await _concursoService.CreateConcursosAsync();
