@@ -12,6 +12,8 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using WebApplication_App_Concurso.Jobs;
 using Hangfire.Dashboard;
+using WebApplication_App_Concurso.Filters;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +26,31 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 #region Swagger configuration
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Name = "X-Api-Key",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
+        Description = "Chave de API necessária para endpoints protegidos (ex: criar concursos)"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey",
+                }
+            },
+            new string [] {}
+        }
+    });
+});
 #endregion
 
 
@@ -55,6 +81,10 @@ if (!isTesting)
 #region Scrapers
 builder.Services.AddScoped<IScrapingService, ConcursosNoBrasilScraper>();
 builder.Services.AddScoped<IScrapingService, PciConcursosScraper>();
+#endregion
+
+#region Injection Filters
+builder.Services.AddScoped<ApiKeyAuthFilter>();
 #endregion
 #endregion
 
