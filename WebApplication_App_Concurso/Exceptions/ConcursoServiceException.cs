@@ -6,6 +6,6 @@
         : base(message, 400) { }
 
         public ConcursoServiceException(string message, Exception innerException)
-            : base(message, 400) { }
+            : base(message, 400, innerException) { }
     }
 }
