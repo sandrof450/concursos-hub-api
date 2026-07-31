@@ -11,7 +11,7 @@
         }
 
         protected AppException(string message, int statusCode, Exception innerException)
-            : base(message)
+            : base(message, innerException)
         {
             StatusCode = statusCode;
         }
