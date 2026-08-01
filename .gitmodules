@@ -1,0 +1,6 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/sandrof450/concursos-hub-web.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/sandrof450/concursos-hub-api.git
