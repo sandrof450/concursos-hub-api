@@ -166,11 +166,14 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
-app.MapGet("/", context =>
+if (!isTesting)
 {
-    context.Response.Redirect("/swagger");
-    return Task.CompletedTask;
-});
+    app.MapGet("/", context =>
+    {
+        context.Response.Redirect("/swagger");
+        return Task.CompletedTask;
+    });
+}
 
 if (!isTesting)
 {
