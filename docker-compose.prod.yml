@@ -11,8 +11,9 @@ services:
       ScrapingSettings__BaseUrl: "https://www.concursosnobrasil.com.br/concursos"
       ScrapingSettings__PciUrl: "https://www.pciconcursos.com.br/concursos"
       ScrapingSettings__UserAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+      JobsSettings__UrlCreateConcurso: "http://localhost:8080/api/Concurso"
     ports:
-      - "80:8080"
+      - "8080:8080"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 10s
